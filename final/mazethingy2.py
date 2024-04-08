@@ -5,7 +5,7 @@ import copy
  
 def test(i):
     print(f"test{i}")
- 
+    
 mazesize=4
 mazeDone=False
 lastSquare=0
