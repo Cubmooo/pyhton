@@ -91,9 +91,12 @@ def canvasprint(directions,lineplace):
                 lineplace[line][(i-(line*4))*3]=1 
  
  
-    for u in range(mazesize): # the previous solution didnt correctly use up and down. it would only index either the up or the down part properly this fixes this problem but checking for an up or down and turning on the corsponding up or down
+    for u in range(4): # the previous solution didnt correctly use up and down. it would only index either the up or the down part properly this fixes this problem but checking for an up or down and turning on the corsponding up or down
         fixlineplacepos=0
+        print(u)
+        print(lineplace[u])
         for o in lineplace[u]:
+            print(o)
             if fixlineplacepos%3==0 and o==1:
                 lineplace[u+1][fixlineplacepos+1]=1
             if fixlineplacepos%3==1 and o==1:
