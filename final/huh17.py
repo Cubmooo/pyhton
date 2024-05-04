@@ -1,0 +1,2 @@
+gh="-"
+print(int(gh))

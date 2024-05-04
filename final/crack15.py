@@ -171,7 +171,6 @@ def check(correctDirections,directions): # checks if the directions taken are co
 
 def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,randomQuestionSettings): # creates the random maths questions
     questionFail=False
-    userRestart=False
     try:
         number1=0
         number2=0

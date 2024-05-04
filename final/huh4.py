@@ -1,22 +1,13 @@
-import random
-import math
-import copy
-#import libraries used
- 
-def test(i):
-    print(f"test{i}")
- 
-mazesize=4
-mazeDone=False 
-lastSquare=0
-directions=[0] # directions used to know where the player has gone
 lineplace={ # line place is the directions the player has gone. it can be broken down by square with 3 values for each square and 4 squares per line. the three values in order mean there is a line going down a line going up and a line going to the right
 0:[0,0,0,0,0,0,0,0,0,0,0,0],
 1:[0,0,0,0,0,0,0,0,0,0,0,0],
 2:[0,0,0,0,0,0,0,0,0,0,0,0],
 3:[0,0,0,0,0,0,0,0,0,0,0,0],
 }
- 
+mazesize=4
+direections=[0,1,2,3,7,11,15,14,13,12,8]
+import math
+
 def defincelineplace(mazesize):
     lineplace={}
     lineplaceindex=[]
@@ -28,28 +19,16 @@ def defincelineplace(mazesize):
         lineplace.update({i:lineplaceindex})
         
     return lineplace 
- 
-def avalivlesquare(currentsquare,direction): # see all avlible next square to move
-    canvas=[32,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15] #used for dicidning next squares start in top left going across then down any square above 32 has been played
-    for e in direction:
-        canvas[e]=e+32
-    possiblesquares=[]
-    actualsquares=[]
-    possiblesquares.append(currentsquare+4) # gather all potential possible squares
-    possiblesquares.append(currentsquare+1)
-    possiblesquares.append(currentsquare-4)
-    possiblesquares.append(currentsquare-1)
-    
-    for i in possiblesquares: # runs through all potentialpossible squares removing all that have been in or dont exist
-        if i<16 and i>-1:
-            if canvas[i]<16:
-                if (i%4==0 and currentsquare%4==3) or (i%4==3 and currentsquare%4==0):
-                    pass
-                else:
-                    actualsquares.append(i)
-    return actualsquares
- 
- 
+
+
+
+testlineplace=defincelineplace(mazesize)
+
+print(lineplace)
+print(testlineplace)
+print(lineplace==testlineplace)
+
+
 def canvasprint(directionss,lineplace2,testlineplace):
     print(lineplace)
     print(testlineplace)
@@ -75,6 +54,10 @@ def canvasprint(directionss,lineplace2,testlineplace):
     fixlineplacepos=0
     previous2point=0
     
+    
+    closesquare=0
+    location=0
+    
     for i in directionss: # runs through the directions turning it into the line place format
         location+=1
         try: # defines close square as the previous square so we can see where a line would be drawn
@@ -83,22 +66,63 @@ def canvasprint(directionss,lineplace2,testlineplace):
             lastspot=True
         line=math.floor(i/4)
         if lastspot==False:# turns the current and previous squares into the right number in line place 
+            print(closesquare,line,i)
                #side 2,5,8
             #i 3-8   2-5   1-2 
             if closesquare-1==i:
-                lineplace2[line][((i-(line*4))*3)+2]=1
+                print(line)
+                testlineplace[line][((i-(line*4))*3)+2]=1
             #i 0-2   1-5   2-8
             if closesquare+1==i:
-                lineplace2[line][((i-(line*4))*3)-1]=1
+                print(line)
+                testlineplace[line][((i-(line*4))*3)-1]=1
             #down 1,4,7,10
             #i 12-1   13-4   14-7   15-10
             if closesquare+4==i:
-                lineplace2[line][((i-(line*4))*3)+1]=1 
+                print(line)
+                testlineplace[line][((i-(line*4))*3)+1]=1 
             #up 0,3,6,9
             if closesquare-4==i:
-                lineplace2[line][(i-(line*4))*3]=1 
+                print(line)
+                testlineplace[line][(i-(line*4))*3]=1 
  
  
+    closesquare=0
+    location=0
+    lastspot=False
+    line=0
+    for c in directionss: # runs through the directions turning it into the line place format
+        location+=1
+        try: # defines close square as the previous square so we can see where a line would be drawn
+            closesquare=directionss[location]
+
+        except IndexError:
+            lastspot=True
+        line=math.floor(c/4)
+        if lastspot==False:# turns the current and previous squares into the right number in line place
+            print(closesquare,line,c)
+               #side 2,5,8
+            #i 3-8   2-5   1-2 
+            if closesquare-1==c:
+                lineplace2[line][((c-(line*4))*3)+2]=1
+            #i 0-2   1-5   2-8
+            if closesquare+1==c:
+                lineplace2[line][((c-(line*4))*3)-1]=1
+            #down 1,4,7,10
+            #i 12-1   13-4   14-7   15-10
+            if closesquare+4==c:
+                lineplace2[line][((c-(line*4))*3)+1]=1 
+            #up 0,3,6,9
+            if closesquare-4==c:
+                lineplace2[line][(c-(line*4))*3]=1 
+                
+    print(lineplace)
+    print(testlineplace)
+    print(lineplace==testlineplace)
+    print(testlineplace[0])
+    print(testlineplace[1])
+    print(testlineplace[2])
+    print(testlineplace[3])
                 
     for u in range(4): # the previous solution didnt correctly use up and down. it would only index either the up or the down part properly this fixes this problem but checking for an up or down and turning on the corsponding up or down
         fixlineplacepos=0
@@ -157,80 +181,5 @@ def canvasprint(directionss,lineplace2,testlineplace):
  
         output=output+currentline+"■\n"
     print(output)# print final output
- 
- 
-def correctdirectionss(): # define the correct direction before we start(currently dose nothing but will use to check later) same prossces as normal directions
-    test(1)
-    lastSquare=0
-    correctdirections=[0]
-    while True:
-        test(2)
-        avaliblenextsquares=avalivlesquare(lastSquare,correctdirections)
-        print(avaliblenextsquares)
-        if len(avaliblenextsquares)==0:
-            return correctdirections
-        gh=random.randint(1,len(avaliblenextsquares))
-        nextsquare=avaliblenextsquares[gh-1]
-        correctdirections.append(nextsquare)
-        lastSquare=nextsquare
- 
-def asknextmove(avalibelsquares): # asks the user where to go next then checks if it is valid if not then repeat
-    while True:
-        print(f"your next avalible squares are {avalibelsquares}")
-        gh=input("where do you want to go \n> ")
-        try:
-            gh=int(gh)
-            if gh in avalibelsquares:
-                return gh
-            else:
-                print("not valid")  
-        except:
-            print("not valid")
- 
-def check(correctdirections,directions):
-    newcorrectdirections=[]
-    pos=0
-    for i in directions:
-        newcorrectdirections.append(correctdirections[pos])
-        pos+=1
-    return not newcorrectdirections==directions
- 
-def maze(lastSquare,lineplace,testlineplace):
-    hold=False
-    while mazeDone==False:# repeat until maze done
-        test(3)
-        canvasprint(directions,testlineplace,lineplace)#print canvas
-        avaliblenextsquares=avalivlesquare(lastSquare,directions)# find next avalible squares if none end program
-        if len(avaliblenextsquares)==0:
-            break
-        nextsquare=asknextmove(avaliblenextsquares)# ask what move they want next then add that to directions and mark that area as having been in
-        print(hold)
-        if hold==False:
-            test(1)
-            holddirections=directions.copy()
-            holdlineplace=copy.deepcopy(lineplace)
-        directions.append(nextsquare)
-        hold=check(correctdirections,directions)
-        lastSquare=nextsquare # updates the current square for next time
-    return directions,holddirections,holdcanvas,holdlineplace
- 
-correctdirections=correctdirectionss() # get correct directions then print them, reset canvas and lineplace for player use
-testlineplace=defincelineplace(mazesize)
-canvasprint(correctdirections,testlineplace,lineplace)
-test(10)
-testlineplace=defincelineplace(mazesize)
- 
-while True:
-    directions,holddirections,holdcanvas,holdlineplace=maze(lastSquare,testlineplace,lineplace)
-    mazecompleteed=(directions==holddirections)
-    print(directions)
-    print(holddirections)
-    print(directions==holddirections)
-    if mazecompleteed==True:
-        print("sucsess")
-        exit()
-    else:
-        directions=holddirections.copy()
-        lineplace=copy.deepcopy(holdlineplace)
-        print("you made a wrong turn and was placed back at last correct point")
-        lastSquare=holddirections[-1]
+    
+canvasprint(direections,lineplace,testlineplace)
