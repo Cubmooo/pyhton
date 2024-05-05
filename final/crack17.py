@@ -170,7 +170,7 @@ def check(correctDirections,directions): # checks if the directions taken are co
         newcorrectDirections=["no"]
     return not newcorrectDirections==directions
 
-def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,randomQuestionSettings,directions,correctDirections): # creates the random maths questions
+def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,randomQuestionSettings): # creates the random maths questions
     questionFail=False
     userRestart=False
     try:
@@ -178,7 +178,7 @@ def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,
         number2=0
         operations=["+","-","*","/"]
         units=["cm","mm","m"]
-        operation=random.randint(randomQuestionSettings["operationmin"],randomQuestionSettings["operation"])
+        operation=random.randint(0,randomQuestionSettings["operation"])
         
         if operation==4 or operation==5: #algebra
             answer=random.randint(randomQuestionSettings["algebraadditionmin"],randomQuestionSettings["algebraadditionmax"])
@@ -187,40 +187,41 @@ def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,
             number3=eval(f"({number1}*{answer})+{number2}")
             print(f"If {number1}x + {number2} = {number3} what does X equal?")
 
-        if operation==6:#time quesiton
-            while True:
-                number1hour=str(random.randint(0,20)).zfill(2)
-                number1Min=str(random.randint(0,59)).zfill(2)
-                number2Hour=str(int(number1hour)+random.randint(randomQuestionSettings['minhourdiffrence'],randomQuestionSettings['maxhourdiffrence'])).zfill(2)
-                number2Min=str(random.randint(0,59)).zfill(2)
-                answer=(60-int(number1Min)+int(number2Min))+60*(int(number2Hour)-int(number1hour)-1)
-                if answer<0:
-                    continue
-                break
-            number2Hourdisplay=number2Hour
-            if int(number2Hour)>=24:
-                number2Hourdisplay=int(number2Hour)%24
-                number2Hourdisplay=str(number2Hourdisplay).zfill(2)
-            print(f"If a train departed from its station at {number1hour}:{number1Min} and arrived at its desination at {number2Hourdisplay}:{number2Min} how long did the ride take?")
-        
-        if operation==7:
-            unit=units[random.randint(0,2)]
-            geometryType=random.randint(0,1)
+        if operation==6 or operation==7:
+            wordQuestion=random.randint(0,1)
+            if wordQuestion==0:#time quesiton
+                while True:
+                    number1hour=str(random.randint(0,20)).zfill(2)
+                    number1min=str(random.randint(0,59)).zfill(2)
+                    number2hour=str(int(number1hour)+random.randint(randomQuestionSettings['minhourdiffrence'],randomQuestionSettings['maxhourdiffrence'])).zfill(2)
+                    number2min=str(random.randint(0,59)).zfill(2)
+                    answer=(60-int(number1min)+int(number2min))+60*(int(number2hour)-int(number1hour)-1)
+                    if answer<0:
+                        continue
+                    break
+                number2hourdisplay=number2hour
+                if int(number2hour)>=24:
+                    number2hourdisplay=int(number2hour)%24
+                    number2hourdisplay=str(number2hourdisplay).zfill(2)
+                print(f"If a train departed from its station at {number1hour}:{number1min} and arrived at its desination at {number2hourdisplay}:{number2min} how long did the ride take?")
             
-            if geometryType==0:# geometry questions
-                number1=random.randint(randomQuestionSettings['geotrianglemin'],randomQuestionSettings['geotrianglemax'])
-                number2=random.randint(randomQuestionSettings['geotrianglemin'],math.floor(randomQuestionSettings['geotrianglemax']-number1/2))
-                answer=round((number1*number2)/2)
-                print(f"What is the volume of a TRIANGLE with a height of {number1}{unit} a width of {number2}{unit}?")
-            if geometryType==1:
-                number1=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-2)
-                randomQuestionSettings['geocubecombinedmax']-=number1
-                number2=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-1)
-                randomQuestionSettings['geocubecombinedmax']-=number2
-                number3=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax'])
-                answer=number1*number2*number3
-                randomQuestionSettings['geocubecombinedmax']=20
-                print(f"What is the volume of a CUBE with a height of {number1}{unit} a width of {number2}{unit} and a depth of {number3}{unit}?")
+            if wordQuestion==1:
+                unit=units[random.randint(0,2)]
+                geometrytype=random.randint(0,1)
+                
+                if geometrytype==0:# geometry questions
+                    number1=random.randint(randomQuestionSettings['geotrianglemin'],randomQuestionSettings['geotrianglemax'])
+                    number2=random.randint(randomQuestionSettings['geotrianglemin'],math.floor(randomQuestionSettings['geotrianglemax']-number1/2))
+                    answer=round((number1*number2)/2)
+                    print(f"What is the volume of a TRIANGLE with a height of {number1}{unit} a width of {number2}{unit}?")
+                if geometrytype==1:
+                    number1=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-2)
+                    randomQuestionSettings['geocubecombinedmax']-=number1
+                    number2=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-1)
+                    randomQuestionSettings['geocubecombinedmax']-=number2
+                    number3=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax'])
+                    answer=number1*number2*number3
+                    print(f"What is the volume of a CUBE with a height of {number1}{unit} a width of {number2}{unit} and a depth of {number3}{unit}?")
         
         if operation==2 or operation==3:#multiplication/division
             number1=random.randint(randomQuestionSettings['multiplicationmin'],randomQuestionSettings['multiplicationmax'])
@@ -241,7 +242,7 @@ def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,
                     continue
                 break
             print(f"What is {number1} {operations[operation]} {number2}?")
-        userAnswer,userExit,userRestart=checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare,directions,correctDirections)
+        userAnswer,userExit,userRestart=checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare)
         return userAnswer,difficulty,randomQuestionSettings,questionFail,userExit,userRestart
     except:
         userExit=False
@@ -249,33 +250,28 @@ def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,
         userAnswer=0
         return userAnswer,difficulty,randomQuestionSettings,questionFail,userExit,userRestart
     
-def checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare,directions,correctDirections): #gives avalible options and check whether answer to the question is correct
-    
+def checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare): #gives avalible options and check whether answer to the question is correct
     userExit=False
-    phonyGiven=False
-    randomNumber=random.randint(1,2)
     userRestart=False
     optionText=""
     potentialAnswers=[]
-    newAvalibleNextSquare=[]
+    newAvaliblenextSquare=[]
     answerFound=False
     holdPotentialAnswers=[]
     location=0
     for i in avaliblenextSquares:
         potentialAnswer=0
-        if i==correctnextSquare and check(correctDirections,directions)==False:
+        if i==correctnextSquare:
             potentialAnswer=answer
             holdPotentialAnswers=[answer]+holdPotentialAnswers
         else:
             while True:
                 potentialAnswer=answer+random.randint(-20,20)
-                if potentialAnswer!=answer and potentialAnswer not in holdPotentialAnswers:
+                if potentialAnswer!=answer:
                     break
             holdPotentialAnswers.append(potentialAnswer)
     if answer not in holdPotentialAnswers:
-        phonyGiven=True
-        phonyCorrectNextSquare=avaliblenextSquares[random.randint(0,len(avaliblenextSquares)-1)]
-        holdPotentialAnswers[0]=answer
+        holdPotentialAnswers[random.randint(0,len(holdPotentialAnswers)-1)]=answer
     potentialAnswers=holdPotentialAnswers.copy()
     for i in avaliblenextSquares:
         if i==lastSquare+mazeSize:
@@ -286,43 +282,18 @@ def checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare,dir
             direction="right"
         if i==lastSquare-1:
             direction="left"
-        if correctnextSquare in avaliblenextSquares and check(correctDirections,directions)==False:
-            if i==correctnextSquare:
-                correctPotentialAnswer=potentialAnswers[0]
-            else:
-                if len(potentialAnswers)==3:
-                    correctPotentialAnswer=potentialAnswers[randomNumber]
-                    potentialAnswers.pop(randomNumber)
-                else:
-                    correctPotentialAnswer=potentialAnswers[1]
+        if i==correctnextSquare:
+            correctPotentialAnswer=potentialAnswers[0]
         else:
-            if i==phonyCorrectNextSquare:
-                    correctPotentialAnswer=potentialAnswers[0]
-            else:
-                if len(potentialAnswers)==3:
-                        correctPotentialAnswer=potentialAnswers[randomNumber]
-                        potentialAnswers.pop(randomNumber)
-                else:
-                    correctPotentialAnswer=potentialAnswers[1]
+            correctPotentialAnswer=potentialAnswers[random.randint(1,len(potentialAnswers)-1)]
         optionText=optionText+str(correctPotentialAnswer)+",("+str(direction)+")  "
         location+=1
-    potentialAnswers=holdPotentialAnswers.copy()
          
     for o in avaliblenextSquares:
-        if phonyGiven==True:
-            if o==phonyCorrectNextSquare:
-                newAvalibleNextSquare=[o]+newAvalibleNextSquare
-            else:
-                newAvalibleNextSquare.append(o)
+        if o==correctnextSquare:
+            newAvaliblenextSquare=[o]+newAvaliblenextSquare
         else:
-            if o==correctnextSquare:
-                newAvalibleNextSquare=[o]+newAvalibleNextSquare
-            else:
-                newAvalibleNextSquare.append(o)
-    if randomNumber==2 and len(potentialAnswers)==3:
-        gh=newAvalibleNextSquare[1]
-        newAvalibleNextSquare[1]=newAvalibleNextSquare[2]
-        newAvalibleNextSquare[2]=gh
+            newAvaliblenextSquare.append(o)
     while answerFound==False:
         intUserAnswer=""
         print(f"Your avalible options are {optionText}")
@@ -344,13 +315,10 @@ def checkmathsanswer(answer,avaliblenextSquares,lastSquare,correctnextSquare,dir
                 intUserAnswer=intUserAnswer+str(i)
             except:
                 continue
-        intUserAnswerCheck=intUserAnswer.replace("-","")    
-        if len(intUserAnswerCheck)==0:
-            continue
         intUserAnswer=int(intUserAnswer)
         for u in range(len(potentialAnswers)):
             if intUserAnswer==potentialAnswers[u]:
-                userMoveSquare=newAvalibleNextSquare[u]
+                userMoveSquare=newAvaliblenextSquare[u]
                 answerFound=True
                 break
             else:
@@ -370,7 +338,7 @@ def maze(lastSquare,linePlace,directions,correctDirections,difficulty,randomQues
             correctnextSquare=correctDirections[len(directions)]
         except:
             correctnextSquare=0
-        nextSquare,difficulty,randomQuestionSettings,questionFail,userExit,userRestart=randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,randomQuestionSettings,directions,correctDirections)
+        nextSquare,difficulty,randomQuestionSettings,questionFail,userExit,userRestart=randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,randomQuestionSettings)
         if userExit==True:
             exit()
         if userRestart==True:
@@ -436,15 +404,14 @@ def questions(): # asks all the questions at the start
         'geocubemin':1,
         'geocubecombinedmax':20,
         'geotrianglemin':1,
-        'geotrianglemax':20,
+        'geotrianglemax':2,
         'minhourdiffrence':0,
         'maxhourdiffrence':3,
         'algebraadditionmin':1,
         'algebraadditionmax':20,
         'algebramultiplicationmin':1,
         'algebramultiplicationmax':(difficulty-1)*8,
-        'operation':(2**difficulty)-1,
-        'operationmin':0
+        'operation':(2**difficulty)-1
     }  
     if doDifficultyAdvance==True:
         randomQuestionSettings=difficultyadvanced(randomQuestionSettings)

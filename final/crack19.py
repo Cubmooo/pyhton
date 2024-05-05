@@ -190,29 +190,29 @@ def randomquestions(avaliblenextSquares,lastSquare,correctnextSquare,difficulty,
         if operation==6:#time quesiton
             while True:
                 number1hour=str(random.randint(0,20)).zfill(2)
-                number1Min=str(random.randint(0,59)).zfill(2)
-                number2Hour=str(int(number1hour)+random.randint(randomQuestionSettings['minhourdiffrence'],randomQuestionSettings['maxhourdiffrence'])).zfill(2)
-                number2Min=str(random.randint(0,59)).zfill(2)
-                answer=(60-int(number1Min)+int(number2Min))+60*(int(number2Hour)-int(number1hour)-1)
+                number1min=str(random.randint(0,59)).zfill(2)
+                number2hour=str(int(number1hour)+random.randint(randomQuestionSettings['minhourdiffrence'],randomQuestionSettings['maxhourdiffrence'])).zfill(2)
+                number2min=str(random.randint(0,59)).zfill(2)
+                answer=(60-int(number1min)+int(number2min))+60*(int(number2hour)-int(number1hour)-1)
                 if answer<0:
                     continue
                 break
-            number2Hourdisplay=number2Hour
-            if int(number2Hour)>=24:
-                number2Hourdisplay=int(number2Hour)%24
-                number2Hourdisplay=str(number2Hourdisplay).zfill(2)
-            print(f"If a train departed from its station at {number1hour}:{number1Min} and arrived at its desination at {number2Hourdisplay}:{number2Min} how long did the ride take?")
+            number2hourdisplay=number2hour
+            if int(number2hour)>=24:
+                number2hourdisplay=int(number2hour)%24
+                number2hourdisplay=str(number2hourdisplay).zfill(2)
+            print(f"If a train departed from its station at {number1hour}:{number1min} and arrived at its desination at {number2hourdisplay}:{number2min} how long did the ride take?")
         
         if operation==7:
             unit=units[random.randint(0,2)]
-            geometryType=random.randint(0,1)
+            geometrytype=random.randint(0,1)
             
-            if geometryType==0:# geometry questions
+            if geometrytype==0:# geometry questions
                 number1=random.randint(randomQuestionSettings['geotrianglemin'],randomQuestionSettings['geotrianglemax'])
                 number2=random.randint(randomQuestionSettings['geotrianglemin'],math.floor(randomQuestionSettings['geotrianglemax']-number1/2))
                 answer=round((number1*number2)/2)
                 print(f"What is the volume of a TRIANGLE with a height of {number1}{unit} a width of {number2}{unit}?")
-            if geometryType==1:
+            if geometrytype==1:
                 number1=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-2)
                 randomQuestionSettings['geocubecombinedmax']-=number1
                 number2=random.randint(randomQuestionSettings['geocubemin'],randomQuestionSettings['geocubecombinedmax']-1)
